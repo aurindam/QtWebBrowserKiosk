@@ -3,7 +3,7 @@
 ** Copyright (C) 2016 The Qt Company Ltd.
 ** Contact: https://www.qt.io/licensing/
 **
-** This file is part of the Qt WebBrowser application.
+** This file is part of the Qt WebBrowser KioskMode application.
 **
 ** $QT_BEGIN_LICENSE:GPL$
 ** Commercial License Usage
@@ -28,7 +28,7 @@
 ****************************************************************************/
 
 import QtQuick 2.5
-import QtQuick.VirtualKeyboard 2.0
+import QtQuick.VirtualKeyboard 2.4
 
 InputPanel {
     id: inputPanel

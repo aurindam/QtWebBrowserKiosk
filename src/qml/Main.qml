@@ -3,7 +3,7 @@
 ** Copyright (C) 2016 The Qt Company Ltd.
 ** Contact: https://www.qt.io/licensing/
 **
-** This file is part of the Qt WebBrowser application.
+** This file is part of the Qt WebBrowser KioskMode application.
 **
 ** $QT_BEGIN_LICENSE:GPL$
 ** Commercial License Usage
@@ -28,8 +28,36 @@
 ****************************************************************************/
 
 import QtQuick 2.5
+import QtQuick.Controls 2.12
+import QtQuick.Window 2.0
+import QtWebEngine 1.8
 
-Item {
+ApplicationWindow {
+    id: window
+    width: AppEngine.getUInt("view/fixed-width")
+    height: AppEngine.getUInt("view/fixed-height")
+    minimumWidth: AppEngine.getUInt("view/minimal-width")
+    minimumHeight: AppEngine.getUInt("view/minimal-height")
+    visible: true
+    title: AppEngine.getQString("application/name")
+
+    property bool fullScreen: AppEngine.getBool("view/fullscreen")
+    property bool maximized: AppEngine.getBool("view/maximized")
+    property bool fixedSize: AppEngine.getBool("view/fixed-size")
+
+    Component.onCompleted: {
+        if (window.fullScreen)
+            window.showFullScreen()
+        else {
+            x = Screen.width / 2 - width / 2
+            y = Screen.height / 2 - height / 2
+            if (window.maximized)
+                window.showMaximized()
+            else if (window.fixedSize)
+                window.showNormal()
+        }
+    }
+
     BrowserWindow{
         id: root
         anchors.fill: parent

@@ -3,7 +3,7 @@
 ** Copyright (C) 2016 The Qt Company Ltd.
 ** Contact: https://www.qt.io/licensing/
 **
-** This file is part of the Qt WebBrowser application.
+** This file is part of the Qt WebBrowser KioskMode application.
 **
 ** $QT_BEGIN_LICENSE:GPL$
 ** Commercial License Usage
@@ -35,58 +35,39 @@
 #include <QtCore/QSettings>
 #include <QtCore/QUrl>
 #include <QtGui/QColor>
-#include <QtQuick/QQuickItemGrabResult>
-
-namespace utils {
-inline bool isTouchEvent(const QEvent* event)
-{
-    switch (event->type()) {
-    case QEvent::TouchBegin:
-    case QEvent::TouchUpdate:
-    case QEvent::TouchEnd:
-        return true;
-    default:
-        return false;
-    }
-}
-
-inline bool isMouseEvent(const QEvent* event)
-{
-    switch (event->type()) {
-    case QEvent::MouseButtonPress:
-    case QEvent::MouseMove:
-    case QEvent::MouseButtonRelease:
-    case QEvent::MouseButtonDblClick:
-        return true;
-    default:
-        return false;
-    }
-}
-
-}
 
 class AppEngine : public QObject {
     Q_OBJECT
 
     Q_PROPERTY(QString settingsPath READ settingsPath FINAL CONSTANT)
-    Q_PROPERTY(QString initialUrl READ initialUrl FINAL CONSTANT)
+    Q_PROPERTY(QString homeUrl READ homeUrl WRITE setHomeUrl)
 
 public:
-    AppEngine(QObject *parent = 0);
+    AppEngine(const QSettings &settings, QObject *parent = 0);
 
     QString settingsPath();
-    QString initialUrl() const;
+    QString homeUrl() const;
+    void setHomeUrl(const QString &url);
 
     Q_INVOKABLE bool isUrl(const QString& userInput);
-    Q_INVOKABLE QUrl fromUserInput(const QString& userInput);
+    Q_INVOKABLE QUrl fromUserInput(const QString& userInput) const;
     Q_INVOKABLE QString domainFromString(const QString& urlString);
     Q_INVOKABLE QString fallbackColor();
     Q_INVOKABLE QString restoreSetting(const QString &name, const QString &defaultValue = QString());
     Q_INVOKABLE void saveSetting(const QString &name, const QString &value);
 
+    Q_INVOKABLE bool getBool(const QString &name, const bool defval = false) const;
+    Q_INVOKABLE int getInt(const QString &name, const int defval = 0) const;
+    Q_INVOKABLE quint16 getUInt(const QString &name, const quint16 defval = 0) const;
+    Q_INVOKABLE qreal getReal(const QString &name, const qreal defval = 0) const;
+    Q_INVOKABLE QString getQString(const QString &name, const QString &defaultValue = QString()) const;
+    Q_INVOKABLE QStringList getQStringList(const QString &name, const QStringList &defaultValue = QStringList()) const;
+
+private:
+    void set(const QSettings &settings);
+
 private:
     QSettings m_settings;
-    QString m_initialUrl;
 };
 
 #endif // APPENGINE_H

@@ -3,7 +3,7 @@
 ** Copyright (C) 2016 The Qt Company Ltd.
 ** Contact: https://www.qt.io/licensing/
 **
-** This file is part of the Qt WebBrowser application.
+** This file is part of the Qt WebBrowser KioskMode application.
 **
 ** $QT_BEGIN_LICENSE:GPL$
 ** Commercial License Usage
@@ -28,26 +28,15 @@
 ****************************************************************************/
 
 #include "appengine.h"
-#include "navigationhistoryproxymodel.h"
-#include "touchtracker.h"
-
-#if defined(DESKTOP_BUILD)
-#include "touchmockingapplication.h"
-#endif
+#include "constant.h"
 
 #include <QGuiApplication>
+#include <QCommandLineParser>
 #include <QQmlContext>
 #include <QQmlEngine>
-#include <QQuickView>
+#include <QQmlApplicationEngine>
+#include <QNetworkProxyFactory>
 #include <QtWebEngine/qtwebengineglobal.h>
-
-static QObject *engine_factory(QQmlEngine *engine, QJSEngine *scriptEngine)
-{
-    Q_UNUSED(engine);
-    Q_UNUSED(scriptEngine);
-    AppEngine *eng = new AppEngine();
-    return eng;
-}
 
 int main(int argc, char **argv)
 {
@@ -56,53 +45,65 @@ int main(int argc, char **argv)
     //do not use any plugins installed on the device
     qputenv("QML2_IMPORT_PATH", QByteArray());
 
-    // We use touch mocking on desktop and apply all the mobile switches.
-    QByteArrayList args = QByteArrayList()
-            << QByteArrayLiteral("--enable-embedded-switches")
-            << QByteArrayLiteral("--log-level=0");
-    const int count = args.size() + argc;
-    QVector<char*> qargv(count);
+    QGuiApplication app(argc, argv);
 
-    qargv[0] = argv[0];
-    for (int i = 0; i < args.size(); ++i)
-        qargv[i + 1] = args[i].data();
-    for (int i = args.size() + 1; i < count; ++i)
-        qargv[i] = argv[i - args.size()];
+    QCommandLineParser parser;
+    parser.setApplicationDescription("This is a modified Qt Web Browser working in kiosk mode");
+    parser.addHelpOption();
+    parser.addVersionOption();
+    parser.addPositionalArgument("homeUrl", QCoreApplication::translate("main", "Open this URL and set as home page, optionally"), "[url]");
 
-    int qAppArgCount = qargv.size();
+    QCommandLineOption configOption(QStringList() << "c" << "config",
+             QCoreApplication::translate("main", "Configuration INI-file"),
+             QCoreApplication::translate("main", "filepath"));
+    parser.addOption(configOption);
+    // Process the actual command line arguments given by the user
+    parser.parse(app.arguments());
+    const QStringList args = parser.positionalArguments();
 
-#if defined(DESKTOP_BUILD)
-    TouchMockingApplication app(qAppArgCount, qargv.data());
-#else
-    QGuiApplication app(qAppArgCount, qargv.data());
-#endif
+    QSettings settings(parser.value(configOption), QSettings::IniFormat);
+    const QString orgName = settings.value(QString(organization)).toString();
+    const QString orgDomain = settings.value(QString(organizationDomain)).toString();
+    const QString appName = settings.value(QString(applicationName)).toString();
+    const QString appVersion = settings.value(QString(applicationVersion)).toString();
 
-    qmlRegisterType<NavigationHistoryProxyModel>("WebBrowser", 1, 0, "SearchProxyModel");
-    qmlRegisterType<TouchTracker>("WebBrowser", 1, 0, "TouchTracker");
-    qmlRegisterSingletonType<AppEngine>("WebBrowser", 1, 0, "AppEngine", engine_factory);
+    app.setOrganizationName(orgName.isEmpty() ? QString(defaultOrganization) : orgName);
+    app.setOrganizationDomain(orgDomain.isEmpty() ? QString(defaultOrganizationDomain) : orgDomain);
+    app.setApplicationName(appName.isEmpty() ? QString(defaultApplicationName) : appName);
+    app.setApplicationVersion(appVersion.isEmpty() ? QString(defaultApplicationVersion) : appVersion);
+
+
+    AppEngine appEngine(settings);
+    if (args.count())
+        appEngine.setHomeUrl(args.at(0));
+    // --- Network --- //
+    if (appEngine.getBool(proxyEnable)) {
+        bool system = appEngine.getBool(proxySystem);
+        if (system) {
+            QNetworkProxyFactory::setUseSystemConfiguration(system);
+        } else {
+            QNetworkProxy proxy;
+            proxy.setType(QNetworkProxy::HttpProxy);
+            proxy.setHostName(
+                appEngine.getQString(proxyHost)
+            );
+            proxy.setPort(appEngine.getUInt(proxyPort));
+            if (appEngine.getBool(proxyAuth)) {
+                proxy.setUser(appEngine.getQString(proxyUsername));
+                proxy.setPassword(appEngine.getQString(proxyPassword));
+            }
+            QNetworkProxy::setApplicationProxy(proxy);
+        }
+    }
 
     QtWebEngine::initialize();
-
-    app.setOrganizationName("The Qt Company");
-    app.setOrganizationDomain("qt.io");
-    app.setApplicationName("qtwebbrowser");
-
-    QQuickView view;
-    view.setTitle("Qt WebBrowser");
-    view.setFlags(Qt::Window | Qt::WindowTitleHint);
-    view.setResizeMode(QQuickView::SizeRootObjectToView);
-    view.setColor(Qt::black);
-    view.setSource(QUrl("qrc:///qml/Main.qml"));
-
-    QObject::connect(view.engine(), SIGNAL(quit()), &app, SLOT(quit()));
-
-#if defined(DESKTOP_BUILD)
-    view.show();
-    if (view.size().isEmpty())
-        view.setGeometry(0, 0, 800, 600);
-#else
-    view.showFullScreen();
-#endif
+    QQmlApplicationEngine engine;
+    QQmlContext *rootContext = engine.rootContext();
+    rootContext->setContextProperty("AppEngine", &appEngine);
+    engine.load(QUrl("qrc:///qml/Main.qml"));
+    if (engine.rootObjects().isEmpty())
+        return -1;
+    QObject::connect(&engine, SIGNAL(quit()), &app, SLOT(quit()));
 
     app.exec();
 }
