@@ -1,6 +1,7 @@
 # QtWebBrowserKiosk
 
 Usage: qtwebbrowserkiosk [options] [homeUrl]
+
 This is a modified Qt Web Browser working in kiosk mode
 
 Options:
@@ -11,11 +12,10 @@ Options:
 Arguments:
   homeUrl                  Open this URL and set as home page, optionally
  
- ***************************************************************************************
- ***************************************************************************************
- ***************************************************************************************
-  
-  Below is a sample config file
+****************************************************************************
+****************************************************************************
+   
+Below is a sample config file
   
   
 [application]
@@ -53,6 +53,3 @@ fullscreen=true
 maximized=false
 minimal-height=200
 minimal-width=320
-
-
-  
