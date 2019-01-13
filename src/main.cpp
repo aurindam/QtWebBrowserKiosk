@@ -51,14 +51,14 @@ int main(int argc, char **argv)
     parser.setApplicationDescription("This is a modified Qt Web Browser working in kiosk mode");
     parser.addHelpOption();
     parser.addVersionOption();
-    parser.addPositionalArgument("homeUrl", QCoreApplication::translate("main", "Open this URL and set as home page, optionally"), "[url]");
+    parser.addPositionalArgument("homeUrl", QCoreApplication::translate("main", "Open this URL and set as home page, optionally"), "[homeUrl]");
 
     QCommandLineOption configOption(QStringList() << "c" << "config",
              QCoreApplication::translate("main", "Configuration INI-file"),
              QCoreApplication::translate("main", "filepath"));
     parser.addOption(configOption);
     // Process the actual command line arguments given by the user
-    parser.parse(app.arguments());
+    parser.process(app);
     const QStringList args = parser.positionalArguments();
 
     QSettings settings(parser.value(configOption), QSettings::IniFormat);
