@@ -27,10 +27,10 @@
 **
 ****************************************************************************/
 
-import QtQuick 2.5
-import QtWebEngine 1.8
+import QtQuick 2.11
+import QtWebEngine 1.7
 
-import QtQuick.Controls 2.12
+import QtQuick.Controls 2.4
 import QtQuick.Layouts 1.0
 import QtQuick.Dialogs 1.2
 import QtGraphicalEffects 1.0
@@ -70,6 +70,7 @@ Item {
 
             enabled: browserWindow.interactive
 
+            onContextMenuRequested: { request.accepted = true }
             settings.javascriptEnabled: AppEngine.getBool("browser/javascript")
             settings.javascriptCanOpenWindows: AppEngine.getBool("browser/javascript_can_open_windows")
             settings.pluginsEnabled: AppEngine.getBool("browser/plugins")

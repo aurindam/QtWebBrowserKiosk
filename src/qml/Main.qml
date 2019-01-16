@@ -27,10 +27,10 @@
 **
 ****************************************************************************/
 
-import QtQuick 2.5
-import QtQuick.Controls 2.12
+import QtQuick 2.11
+import QtQuick.Controls 2.4
 import QtQuick.Window 2.0
-import QtWebEngine 1.8
+import QtWebEngine 1.7
 
 ApplicationWindow {
     id: window

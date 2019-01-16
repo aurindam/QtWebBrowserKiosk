@@ -27,8 +27,8 @@
 **
 ****************************************************************************/
 
-import QtQuick 2.5
-import QtQuick.VirtualKeyboard 2.4
+import QtQuick 2.11
+import QtQuick.VirtualKeyboard 2.3
 
 InputPanel {
     id: inputPanel
