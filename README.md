@@ -1,6 +1,6 @@
 # QtWebBrowserKiosk
 
-Usage: qtwebbrowserkiosk [options] [homeUrl]
+Usage: qtwebbrowserkiosk [options] [startUrl]
 
 This is a modified Qt Web Browser working in kiosk mode
 
@@ -10,7 +10,7 @@ Options:
   -c, --config <filepath>  Configuration INI-file
 
 Arguments:
-  homeUrl                  Open this URL and set as home page, optionally
+  startUrl                  Open this URL, optionally (else the home page in config file will be used)
  
 ****************************************************************************
 ****************************************************************************
@@ -19,7 +19,7 @@ Below is a sample config file
   
   
 [application]
-icon=qrc:///assets/icon/AppLogoColor.png
+icon=qrc:///qml/assets/icons/AppLogoColor.png
 name=QtWebBrowserKiosk
 organization=The Qt Company
 organization-domain=www.qt.io
@@ -53,3 +53,4 @@ fullscreen=true
 maximized=false
 minimal-height=200
 minimal-width=320
+show_keyboard=true

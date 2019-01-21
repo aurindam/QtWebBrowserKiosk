@@ -51,7 +51,7 @@ int main(int argc, char **argv)
     parser.setApplicationDescription("This is a modified Qt Web Browser working in kiosk mode");
     parser.addHelpOption();
     parser.addVersionOption();
-    parser.addPositionalArgument("startUrl", QCoreApplication::translate("main", "Open this URL, optionally"), "[startUrl]");
+    parser.addPositionalArgument("startUrl", QCoreApplication::translate("main", "Open this URL, optionally (else the homepage in config file will be used)"), "[startUrl]");
 
     QCommandLineOption configOption(QStringList() << "c" << "config",
              QCoreApplication::translate("main", "Configuration INI-file"),
