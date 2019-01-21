@@ -34,6 +34,7 @@ InputPanel {
     id: inputPanel
     property int windowHeight: 0
     property int animationDuration: 0
+    property bool showKeyboard : AppEngine.getBool("view/show_keyboard")
 
     y: windowHeight
     anchors {
@@ -42,7 +43,7 @@ InputPanel {
     }
     states: State {
         name: "visible"
-        when: Qt.inputMethod.visible
+        when: Qt.inputMethod.visible && showKeyboard
         PropertyChanges {
             target: inputPanel
             y: windowHeight - inputPanel.height

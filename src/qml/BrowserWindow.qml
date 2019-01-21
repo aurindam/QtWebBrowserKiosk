@@ -122,7 +122,7 @@ Item {
                 id: placeholder
                 y: placeholder.height
                 anchors.horizontalCenter: parent.horizontalCenter
-                source: "assets/icons/AppLogoColor.png"
+                source: AppEngine.getQString("application/icon")
             }
             Text {
                 id: label
@@ -134,7 +134,7 @@ Item {
                 font.family: defaultFontFamily
                 font.pixelSize: 28
                 color: uiColor
-                text: "Qt WebBrowser Kiosk"
+                text: AppEngine.getQString("application/name")
             }
 
             Behavior on opacity {
@@ -143,7 +143,7 @@ Item {
         }
 
         Component.onCompleted: {
-            webEngineView.url = AppEngine.homeUrl
+            webEngineView.url = AppEngine.startUrl
         }
     }
 

@@ -51,7 +51,7 @@ int main(int argc, char **argv)
     parser.setApplicationDescription("This is a modified Qt Web Browser working in kiosk mode");
     parser.addHelpOption();
     parser.addVersionOption();
-    parser.addPositionalArgument("homeUrl", QCoreApplication::translate("main", "Open this URL and set as home page, optionally"), "[homeUrl]");
+    parser.addPositionalArgument("startUrl", QCoreApplication::translate("main", "Open this URL, optionally"), "[startUrl]");
 
     QCommandLineOption configOption(QStringList() << "c" << "config",
              QCoreApplication::translate("main", "Configuration INI-file"),
@@ -75,7 +75,7 @@ int main(int argc, char **argv)
 
     AppEngine appEngine(settings);
     if (args.count())
-        appEngine.setHomeUrl(args.at(0));
+        appEngine.setStartUrl(args.at(0));
     // --- Network --- //
     if (appEngine.getBool(proxyEnable)) {
         bool system = appEngine.getBool(proxySystem);

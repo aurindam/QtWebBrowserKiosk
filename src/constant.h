@@ -51,6 +51,7 @@ const char* const viewFixedWidth = "view/fixed-width";
 const char* const viewFixedHeight = "view/fixed-height";
 const char* const viewMinimalWidth = "view/minimal-width";
 const char* const viewMinimalHeight = "view/minimal-height";
+const char* const viewKeyboard = "view/show_keyboard";
 
 const char* const browserHomePage = "browser/homepage";
 const char* const javascript = "browser/javascript";
@@ -65,6 +66,6 @@ const char* const defaultOrganization = "The Qt Company";
 const char* const defaultOrganizationDomain = "www.qt.io";
 const char* const defaultApplicationName = "QtWebBrowserKiosk";
 const char* const defaultApplicationVersion = "1.0.0";
-const char* const defaultApplicationIcon = "qrc:///assets/icon/AppLogoColor.png";
+const char* const defaultApplicationIcon = "qrc:///qml/assets/icons/AppLogoColor.png";
 
 #endif // CONSTANT_H

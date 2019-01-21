@@ -41,7 +41,8 @@ AppEngine::AppEngine(const QSettings &settings,
     : QObject(parent)
     , m_settings(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) % QDir::separator() % "settings.ini", QSettings::IniFormat, this)
 {
-    set(settings);
+    if (settings.allKeys().count())
+        set(settings);
 }
 
 QString AppEngine::settingsPath()
@@ -49,101 +50,50 @@ QString AppEngine::settingsPath()
     return m_settings.fileName();
 }
 
-QString AppEngine::homeUrl() const
+QString AppEngine::startUrl() const
 {
-    return fromUserInput(getQString(browserHomePage)).toString();
+   const QUrl url =  m_startUrl.isEmpty() ? fromUserInput(getQString(browserHomePage)) : m_startUrl;
+   return url.toString();
 }
 
-void AppEngine::setHomeUrl(const QString &url)
+void AppEngine::setStartUrl(const QString &url)
 {
-    if(isUrl(url))
-        m_settings.setValue(browserHomePage, url);
+    m_startUrl = fromUserInput(url);
 }
 
 void AppEngine::set(const QSettings &settings)
 {
-    settings.contains(organization) ?
-                m_settings.setValue(organization, settings.value(organization)) :
-                m_settings.setValue(organization, defaultOrganization);
-    settings.contains(organizationDomain) ?
-                m_settings.setValue(organizationDomain, settings.value(organizationDomain)) :
-                m_settings.setValue(organizationDomain, defaultOrganizationDomain);
-    settings.contains(applicationName) ?
-                m_settings.setValue(applicationName, settings.value(applicationName)) :
-                m_settings.setValue(applicationName, defaultApplicationName);
-    settings.contains(applicationVersion) ?
-                m_settings.setValue(applicationVersion, settings.value(applicationVersion)) :
-                m_settings.setValue(applicationVersion, defaultApplicationVersion);
-    settings.contains(applicationIcon) ?
-                m_settings.setValue(applicationIcon, settings.value(applicationIcon)) :
-                m_settings.setValue(applicationIcon, defaultApplicationIcon);
+    m_settings.setValue(organization, settings.value(organization, defaultOrganization));
+    m_settings.setValue(organizationDomain, settings.value(organizationDomain, defaultOrganizationDomain));
+    m_settings.setValue(applicationName, settings.value(applicationName, defaultApplicationName));
+    m_settings.setValue(applicationVersion, settings.value(applicationVersion, defaultApplicationVersion));
+    m_settings.setValue(applicationIcon, settings.value(applicationIcon, defaultApplicationIcon));
 
-    settings.contains(proxyEnable) ?
-                m_settings.setValue(proxyEnable, settings.value(proxyEnable)) :
-                m_settings.setValue(proxyEnable, false);
-    settings.contains(proxySystem) ?
-                m_settings.setValue(proxySystem, settings.value(proxySystem)) :
-                m_settings.setValue(proxySystem, true);
-    settings.contains(proxyHost) ?
-                m_settings.setValue(proxyHost, settings.value(proxyHost)) :
-                m_settings.setValue(proxyHost, QStringLiteral("proxy.example.com"));
-    settings.contains(proxyPort) ?
-                m_settings.setValue(proxyPort, settings.value(proxyPort)) :
-                m_settings.setValue(proxyPort, 3128);
-    settings.contains(proxyAuth) ?
-                m_settings.setValue(proxyAuth, settings.value(proxyAuth)) :
-                m_settings.setValue(proxyAuth, false);
-    settings.contains(proxyUsername) ?
-                m_settings.setValue(proxyUsername, settings.value(proxyUsername)) :
-                m_settings.setValue(proxyUsername, QStringLiteral("username"));
-    settings.contains(proxyPassword) ?
-                m_settings.setValue(proxyPassword, settings.value(proxyPassword)) :
-                m_settings.setValue(proxyPassword, QStringLiteral("password"));
+    m_settings.setValue(proxyEnable, settings.value(proxyEnable, false));
+    m_settings.setValue(proxySystem, settings.value(proxySystem, true));
+    m_settings.setValue(proxyHost, settings.value(proxyHost, QStringLiteral("proxy.example.com")));
+    m_settings.setValue(proxyPort, settings.value(proxyPort, 3128));
+    m_settings.setValue(proxyAuth, settings.value(proxyAuth, false));
+    m_settings.setValue(proxyUsername, settings.value(proxyUsername, QStringLiteral("username")));
+    m_settings.setValue(proxyPassword, settings.value(proxyPassword, QStringLiteral("password")));
 
-    settings.contains(viewFullScreen) ?
-                m_settings.setValue(viewFullScreen, settings.value(viewFullScreen)) :
-                m_settings.setValue(viewFullScreen, true);
-    settings.contains(viewMaximized) ?
-                m_settings.setValue(viewMaximized, settings.value(viewMaximized)) :
-                m_settings.setValue(viewMaximized, false);
-    settings.contains(viewFixedSize) ?
-                m_settings.setValue(viewFixedSize, settings.value(viewFixedSize)) :
-                m_settings.setValue(viewFixedSize, false);
-    settings.contains(viewFixedWidth) ?
-                m_settings.setValue(viewFixedWidth, settings.value(viewFixedWidth)) :
-                m_settings.setValue(viewFixedWidth, 1024);
-    settings.contains(viewFixedHeight) ?
-                m_settings.setValue(viewFixedHeight, settings.value(viewFixedHeight)) :
-                m_settings.setValue(viewFixedHeight, 600);
-    settings.contains(viewMinimalWidth) ?
-                m_settings.setValue(viewMinimalWidth, settings.value(viewMinimalWidth)) :
-                m_settings.setValue(viewMinimalWidth, 320);
-    settings.contains(viewMinimalHeight) ?
-                m_settings.setValue(viewMinimalHeight, settings.value(viewMinimalHeight)) :
-                m_settings.setValue(viewMinimalHeight, 200);
+    m_settings.setValue(viewFullScreen, settings.value(viewFullScreen, true));
+    m_settings.setValue(viewMaximized, settings.value(viewMaximized, false));
+    m_settings.setValue(viewFixedSize, settings.value(viewFixedSize, false));
+    m_settings.setValue(viewFixedWidth, settings.value(viewFixedWidth, 1024));
+    m_settings.setValue(viewFixedHeight, settings.value(viewFixedHeight, 600));
+    m_settings.setValue(viewMinimalWidth, settings.value(viewMinimalWidth, 320));
+    m_settings.setValue(viewMinimalHeight, settings.value(viewMinimalHeight, 200));
+    m_settings.setValue(viewKeyboard, settings.value(viewKeyboard, true));
 
-    settings.contains(browserHomePage) ?
-                m_settings.setValue(browserHomePage, settings.value(browserHomePage)) :
-                m_settings.setValue(browserHomePage, defaultOrganizationDomain);
-    settings.contains(javascript) ?
-                m_settings.setValue(javascript, settings.value(javascript)) :
-                m_settings.setValue(javascript, true);
-    settings.contains(javascriptCanOpenWindows) ?
-                m_settings.setValue(javascriptCanOpenWindows, settings.value(javascriptCanOpenWindows)) :
-                m_settings.setValue(javascriptCanOpenWindows, false);
-    settings.contains(webgl) ?
-                m_settings.setValue(webgl, settings.value(webgl)) :
-                m_settings.setValue(webgl, false);
-    settings.contains(plugins) ?
-                m_settings.setValue(plugins, settings.value(plugins)) :
-                m_settings.setValue(plugins, true);
-    settings.contains(ignoreSslErrors) ?
-                m_settings.setValue(ignoreSslErrors, settings.value(ignoreSslErrors)) :
-                m_settings.setValue(ignoreSslErrors, true);
+    m_settings.setValue(browserHomePage, settings.value(browserHomePage, defaultOrganizationDomain));
+    m_settings.setValue(javascript, settings.value(javascript, true));
+    m_settings.setValue(javascriptCanOpenWindows, settings.value(javascriptCanOpenWindows, false));
+    m_settings.setValue(webgl, settings.value(webgl, false));
+    m_settings.setValue(plugins, settings.value(plugins, true));
+    m_settings.setValue(ignoreSslErrors, settings.value(ignoreSslErrors, true));
 
-    settings.contains(localStorageEnable) ?
-                m_settings.setValue(localStorageEnable, settings.value(localStorageEnable)) :
-                m_settings.setValue(localStorageEnable, false);
+    m_settings.setValue(localStorageEnable, settings.value(localStorageEnable, false));
 }
 
 QUrl AppEngine::fromUserInput(const QString& userInput) const

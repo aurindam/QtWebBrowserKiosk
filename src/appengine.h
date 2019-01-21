@@ -40,14 +40,14 @@ class AppEngine : public QObject {
     Q_OBJECT
 
     Q_PROPERTY(QString settingsPath READ settingsPath FINAL CONSTANT)
-    Q_PROPERTY(QString homeUrl READ homeUrl WRITE setHomeUrl)
+    Q_PROPERTY(QString startUrl READ startUrl WRITE setStartUrl)
 
 public:
     AppEngine(const QSettings &settings, QObject *parent = 0);
 
     QString settingsPath();
-    QString homeUrl() const;
-    void setHomeUrl(const QString &url);
+    QString startUrl() const;
+    void setStartUrl(const QString &url);
 
     Q_INVOKABLE bool isUrl(const QString& userInput);
     Q_INVOKABLE QUrl fromUserInput(const QString& userInput) const;
@@ -68,6 +68,7 @@ private:
 
 private:
     QSettings m_settings;
+    QUrl m_startUrl;
 };
 
 #endif // APPENGINE_H
