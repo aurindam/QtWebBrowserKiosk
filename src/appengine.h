@@ -65,6 +65,7 @@ public:
 
 private:
     void set(const QSettings &settings);
+    void setDefaultValues();
 
 private:
     QSettings m_settings;

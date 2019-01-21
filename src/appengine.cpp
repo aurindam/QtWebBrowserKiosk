@@ -41,8 +41,9 @@ AppEngine::AppEngine(const QSettings &settings,
     : QObject(parent)
     , m_settings(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) % QDir::separator() % "settings.ini", QSettings::IniFormat, this)
 {
-    if (settings.allKeys().count())
-        set(settings);
+    if (!m_settings.allKeys().count())
+        setDefaultValues();
+    set(settings);
 }
 
 QString AppEngine::settingsPath()
@@ -63,37 +64,11 @@ void AppEngine::setStartUrl(const QString &url)
 
 void AppEngine::set(const QSettings &settings)
 {
-    m_settings.setValue(organization, settings.value(organization, defaultOrganization));
-    m_settings.setValue(organizationDomain, settings.value(organizationDomain, defaultOrganizationDomain));
-    m_settings.setValue(applicationName, settings.value(applicationName, defaultApplicationName));
-    m_settings.setValue(applicationVersion, settings.value(applicationVersion, defaultApplicationVersion));
-    m_settings.setValue(applicationIcon, settings.value(applicationIcon, defaultApplicationIcon));
-
-    m_settings.setValue(proxyEnable, settings.value(proxyEnable, false));
-    m_settings.setValue(proxySystem, settings.value(proxySystem, true));
-    m_settings.setValue(proxyHost, settings.value(proxyHost, QStringLiteral("proxy.example.com")));
-    m_settings.setValue(proxyPort, settings.value(proxyPort, 3128));
-    m_settings.setValue(proxyAuth, settings.value(proxyAuth, false));
-    m_settings.setValue(proxyUsername, settings.value(proxyUsername, QStringLiteral("username")));
-    m_settings.setValue(proxyPassword, settings.value(proxyPassword, QStringLiteral("password")));
-
-    m_settings.setValue(viewFullScreen, settings.value(viewFullScreen, true));
-    m_settings.setValue(viewMaximized, settings.value(viewMaximized, false));
-    m_settings.setValue(viewFixedSize, settings.value(viewFixedSize, false));
-    m_settings.setValue(viewFixedWidth, settings.value(viewFixedWidth, 1024));
-    m_settings.setValue(viewFixedHeight, settings.value(viewFixedHeight, 600));
-    m_settings.setValue(viewMinimalWidth, settings.value(viewMinimalWidth, 320));
-    m_settings.setValue(viewMinimalHeight, settings.value(viewMinimalHeight, 200));
-    m_settings.setValue(viewKeyboard, settings.value(viewKeyboard, true));
-
-    m_settings.setValue(browserHomePage, settings.value(browserHomePage, defaultOrganizationDomain));
-    m_settings.setValue(javascript, settings.value(javascript, true));
-    m_settings.setValue(javascriptCanOpenWindows, settings.value(javascriptCanOpenWindows, false));
-    m_settings.setValue(webgl, settings.value(webgl, false));
-    m_settings.setValue(plugins, settings.value(plugins, true));
-    m_settings.setValue(ignoreSslErrors, settings.value(ignoreSslErrors, true));
-
-    m_settings.setValue(localStorageEnable, settings.value(localStorageEnable, false));
+    const QStringList keyList = settings.allKeys();
+    QString key;
+    foreach (key, keyList) {
+        m_settings.setValue(key, settings.value(key));
+    }
 }
 
 QUrl AppEngine::fromUserInput(const QString& userInput) const
@@ -188,4 +163,39 @@ QStringList AppEngine::getQStringList(const QString &name, const QStringList &de
         return m_settings.value(name).toStringList();
     }
     return defaultValue;
+}
+
+void AppEngine::setDefaultValues()
+{
+    m_settings.setValue(organization, defaultOrganization);
+    m_settings.setValue(organizationDomain, defaultOrganizationDomain);
+    m_settings.setValue(applicationName, defaultApplicationName);
+    m_settings.setValue(applicationVersion, defaultApplicationVersion);
+    m_settings.setValue(applicationIcon, defaultApplicationIcon);
+
+    m_settings.setValue(proxyEnable, false);
+    m_settings.setValue(proxySystem, true);
+    m_settings.setValue(proxyHost, QStringLiteral("proxy.example.com"));
+    m_settings.setValue(proxyPort, 3128);
+    m_settings.setValue(proxyAuth, false);
+    m_settings.setValue(proxyUsername, QStringLiteral("username"));
+    m_settings.setValue(proxyPassword, QStringLiteral("password"));
+
+    m_settings.setValue(viewFullScreen, true);
+    m_settings.setValue(viewMaximized, false);
+    m_settings.setValue(viewFixedSize, false);
+    m_settings.setValue(viewFixedWidth, 1024);
+    m_settings.setValue(viewFixedHeight, 600);
+    m_settings.setValue(viewMinimalWidth, 320);
+    m_settings.setValue(viewMinimalHeight, 200);
+    m_settings.setValue(viewKeyboard, true);
+
+    m_settings.setValue(browserHomePage, defaultOrganizationDomain);
+    m_settings.setValue(javascript, true);
+    m_settings.setValue(javascriptCanOpenWindows, false);
+    m_settings.setValue(webgl, false);
+    m_settings.setValue(plugins, true);
+    m_settings.setValue(ignoreSslErrors, true);
+
+    m_settings.setValue(localStorageEnable, false);
 }
