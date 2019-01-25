@@ -45,10 +45,9 @@ Item {
 
     property int animationDuration: 200
 
-    visible: true
-
     Item {
         id: browserWindow
+
         property bool interactive: {
             if (sslDialog.visible)
                 return false

@@ -61,6 +61,7 @@ const char* const plugins = "browser/plugins";
 const char* const ignoreSslErrors = "browser/ignore_ssl_errors";
 
 const char* const localStorageEnable = "localstorage/enable";
+const char* const videoUrl = "video/url";
 
 const char* const defaultOrganization = "The Qt Company";
 const char* const defaultOrganizationDomain = "www.qt.io";

@@ -59,12 +59,27 @@ ApplicationWindow {
     }
 
     BrowserWindow{
-        id: root
+        id: browser
         anchors.fill: parent
+        visible: !overlay.visible
         Keyboard{
             id: inputPanel
-            windowHeight: root.height
-            animationDuration: root.animationDuration
+            windowHeight: browser.height
+            animationDuration: browser.animationDuration
         }
+    }
+
+    VideoOverlay {
+        id: overlay
+        anchors.fill: parent
+        visible: true
+        z: 1
+    }
+
+    Timer {
+        interval: 10000
+        running: true
+        repeat: true
+        onTriggered: overlay.visible = true
     }
 }

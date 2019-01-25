@@ -67,7 +67,11 @@ void AppEngine::set(const QSettings &settings)
     const QStringList keyList = settings.allKeys();
     QString key;
     foreach (key, keyList) {
-        m_settings.setValue(key, settings.value(key));
+        if (key == QString(videoUrl)) {
+            m_settings.setValue(key, fromUserInput(settings.value(key).toString()));
+        } else {
+                   m_settings.setValue(key, settings.value(key));
+        }
     }
 }
 

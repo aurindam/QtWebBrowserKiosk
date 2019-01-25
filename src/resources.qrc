@@ -4,5 +4,7 @@
         <file>qml/assets/icons/AppLogoColor.png</file>
         <file>qml/Keyboard.qml</file>
         <file>qml/Main.qml</file>
+        <file>qml/VideoOverlay.qml</file>
+        <file>qml/assets/videos/ABB.m4v</file>
     </qresource>
 </RCC>
