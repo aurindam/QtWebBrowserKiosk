@@ -67,11 +67,11 @@ void AppEngine::set(const QSettings &settings)
     const QStringList keyList = settings.allKeys();
     QString key;
     foreach (key, keyList) {
-        if (key == QString(videoUrl)) {
-            m_settings.setValue(key, fromUserInput(settings.value(key).toString()));
-        } else {
-                   m_settings.setValue(key, settings.value(key));
+        QVariant variant = settings.value(key);
+        if (key == QString(videoUrl) || key == QString(browserHomePage) || key == QString(organizationDomain)) {
+            variant = fromUserInput(settings.value(key).toString()).toString();
         }
+        m_settings.setValue(key, variant);
     }
 }
 
@@ -202,4 +202,5 @@ void AppEngine::setDefaultValues()
     m_settings.setValue(ignoreSslErrors, true);
 
     m_settings.setValue(localStorageEnable, false);
+    m_settings.setValue(videoUrl, defaultVideoUrl);
 }

@@ -62,7 +62,7 @@ ApplicationWindow {
         id: browser
         anchors.fill: parent
         visible: !overlay.visible
-        Keyboard{
+        Keyboard {
             id: inputPanel
             windowHeight: browser.height
             animationDuration: browser.animationDuration
@@ -77,7 +77,7 @@ ApplicationWindow {
     }
 
     Timer {
-        interval: 10000
+        interval: 120000
         running: true
         repeat: true
         onTriggered: overlay.visible = true

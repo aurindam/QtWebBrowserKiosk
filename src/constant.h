@@ -68,5 +68,6 @@ const char* const defaultOrganizationDomain = "www.qt.io";
 const char* const defaultApplicationName = "QtWebBrowserKiosk";
 const char* const defaultApplicationVersion = "1.0.0";
 const char* const defaultApplicationIcon = "qrc:///qml/assets/icons/AppLogoColor.png";
+const char* const defaultVideoUrl = "qrc:///qml/assets/videos/Qt.m4v";
 
 #endif // CONSTANT_H

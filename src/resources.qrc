@@ -5,6 +5,6 @@
         <file>qml/Keyboard.qml</file>
         <file>qml/Main.qml</file>
         <file>qml/VideoOverlay.qml</file>
-        <file>qml/assets/videos/ABB.m4v</file>
+        <file>qml/assets/videos/Qt.m4v</file>
     </qresource>
 </RCC>
