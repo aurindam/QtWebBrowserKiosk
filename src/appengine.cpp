@@ -53,8 +53,8 @@ QString AppEngine::settingsPath()
 
 QString AppEngine::startUrl() const
 {
-   const QUrl url =  m_startUrl.isEmpty() ? fromUserInput(getQString(browserHomePage)) : m_startUrl;
-   return url.toString();
+   const QString url =  m_startUrl.isEmpty() ? fromUserInput(getQString(browserHomePage)) : m_startUrl;
+   return url;
 }
 
 void AppEngine::setStartUrl(const QString &url)
@@ -67,16 +67,21 @@ void AppEngine::set(const QSettings &settings)
     const QStringList keyList = settings.allKeys();
     QString key;
     foreach (key, keyList) {
-        m_settings.setValue(key, settings.value(key));
+        QVariant variant = settings.value(key);
+        if (key == QString(browserHomePage) || key == QString(organizationDomain)) {
+            variant = fromUserInput(settings.value(key).toString());
+        }
+        m_settings.setValue(key, variant);
     }
 }
 
-QUrl AppEngine::fromUserInput(const QString& userInput) const
+QString AppEngine::fromUserInput(const QString& userInput) const
 {
     QFileInfo fileInfo(userInput);
+    QUrl url = QUrl::fromUserInput(userInput);
     if (fileInfo.exists())
-        return QUrl::fromLocalFile(fileInfo.absoluteFilePath());
-    return QUrl::fromUserInput(userInput);
+        url = QUrl::fromLocalFile(fileInfo.absoluteFilePath());
+    return url.toString();
 }
 
 bool AppEngine::isUrl(const QString& userInput)
