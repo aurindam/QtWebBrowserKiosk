@@ -75,6 +75,7 @@ Item {
             settings.pluginsEnabled: AppEngine.getBool("browser/plugins")
             settings.webGLEnabled: AppEngine.getBool("browser/plugins")
             settings.localStorageEnabled: AppEngine.getBool("localstorage/enable")
+            settings.focusOnNavigationEnabled: true
 
             onCertificateError: {
                 if (!acceptedCertificates.shouldAutoAccept(error)){
