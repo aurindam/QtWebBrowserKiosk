@@ -50,7 +50,7 @@ public:
     void setStartUrl(const QString &url);
 
     Q_INVOKABLE bool isUrl(const QString& userInput);
-    Q_INVOKABLE QUrl fromUserInput(const QString& userInput) const;
+    Q_INVOKABLE QString fromUserInput(const QString& userInput) const;
     Q_INVOKABLE QString domainFromString(const QString& urlString);
     Q_INVOKABLE QString fallbackColor();
     Q_INVOKABLE QString restoreSetting(const QString &name, const QString &defaultValue = QString());
@@ -69,7 +69,7 @@ private:
 
 private:
     QSettings m_settings;
-    QUrl m_startUrl;
+    QString m_startUrl;
 };
 
 #endif // APPENGINE_H

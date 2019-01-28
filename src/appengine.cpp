@@ -54,8 +54,8 @@ QString AppEngine::settingsPath()
 
 QString AppEngine::startUrl() const
 {
-   const QUrl url =  m_startUrl.isEmpty() ? fromUserInput(getQString(browserHomePage)) : m_startUrl;
-   return url.toString();
+   const QString url =  m_startUrl.isEmpty() ? fromUserInput(getQString(browserHomePage)) : m_startUrl;
+   return url;
 }
 
 void AppEngine::setStartUrl(const QString &url)
@@ -69,19 +69,28 @@ void AppEngine::set(const QSettings &settings)
     QString key;
     foreach (key, keyList) {
         QVariant variant = settings.value(key);
-        if (key == QString(videoUrl) || key == QString(browserHomePage) || key == QString(organizationDomain)) {
-            variant = fromUserInput(settings.value(key).toString()).toString();
+        if (key == QString(browserHomePage) || key == QString(organizationDomain)) {
+            variant = fromUserInput(settings.value(key).toString());
+        }
+        if (key == QString(videoPlaylist)) {
+            const QStringList playlist = settings.value(key).toStringList();
+            QString file;
+            QStringList normalizedPlayList;
+            foreach (file, playlist) {
+                normalizedPlayList << fromUserInput(file);
+            }
         }
         m_settings.setValue(key, variant);
     }
 }
 
-QUrl AppEngine::fromUserInput(const QString& userInput) const
+QString AppEngine::fromUserInput(const QString& userInput) const
 {
     QFileInfo fileInfo(userInput);
+    QString url = QUrl::fromUserInput(userInput).toString();
     if (fileInfo.exists())
-        return QUrl::fromLocalFile(fileInfo.absoluteFilePath());
-    return QUrl::fromUserInput(userInput);
+        url = QUrl::fromLocalFile(fileInfo.absoluteFilePath()).toString();
+    return url;
 }
 
 bool AppEngine::isUrl(const QString& userInput)
@@ -203,6 +212,6 @@ void AppEngine::setDefaultValues()
     m_settings.setValue(ignoreSslErrors, true);
 
     m_settings.setValue(localStorageEnable, false);
-    m_settings.setValue(videoUrl, defaultVideoUrl);
+    m_settings.setValue(videoPlaylist, QStringList() << defaultVideoUrl);
     m_settings.setValue(videoTimeout, defaultVideoTimeout);
 }

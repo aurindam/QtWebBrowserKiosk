@@ -62,7 +62,7 @@ const char* const ignoreSslErrors = "browser/ignore_ssl_errors";
 
 const char* const localStorageEnable = "localstorage/enable";
 
-const char* const videoUrl = "video/url";
+const char* const videoPlaylist = "video/playlist";
 const char* const videoTimeout = "video/timeout";
 
 const char* const defaultOrganization = "The Qt Company";

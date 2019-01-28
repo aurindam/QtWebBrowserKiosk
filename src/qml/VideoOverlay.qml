@@ -7,9 +7,15 @@ Item {
     anchors.fill: parent
     visible: true
 
+    onVisibleChanged: {
+        if (visible)
+            mediaPlayer.play()
+        else
+            timer.start()
+    }
+
     MediaPlayer {
         id: mediaPlayer
-        source: AppEngine.getQString("video/url")
         autoPlay: true
         loops: MediaPlayer.Infinite
     }
@@ -17,18 +23,22 @@ Item {
         anchors.fill: parent
         source: mediaPlayer
     }
+    Playlist {
+        id: playList
+    }
     MouseArea {
         id: playArea
         anchors.fill: parent
         onPressed: {
-            mediaPlayer.stop();
+            mediaPlayer.pause();
             videoOverlay.visible = false
         }
     }
-    onVisibleChanged: {
-        if (visible)
-            mediaPlayer.play()
-        else
-            timer.start()
+
+    Component.onCompleted:  {
+        var list = AppEngine.getQStringList("video/playlist")
+        for (var i = 0, len = list.length; i < len; i++)
+            playList.insertItem(i, list[i])
+        mediaPlayer.playlist = playList
     }
 }
