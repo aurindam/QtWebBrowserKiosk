@@ -203,4 +203,5 @@ void AppEngine::setDefaultValues()
 
     m_settings.setValue(localStorageEnable, false);
     m_settings.setValue(videoUrl, defaultVideoUrl);
+    m_settings.setValue(videoTimeout, defaultVideoTimeout);
 }

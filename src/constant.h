@@ -61,7 +61,9 @@ const char* const plugins = "browser/plugins";
 const char* const ignoreSslErrors = "browser/ignore_ssl_errors";
 
 const char* const localStorageEnable = "localstorage/enable";
+
 const char* const videoUrl = "video/url";
+const char* const videoTimeout = "video/timeout";
 
 const char* const defaultOrganization = "The Qt Company";
 const char* const defaultOrganizationDomain = "www.qt.io";
@@ -69,5 +71,6 @@ const char* const defaultApplicationName = "QtWebBrowserKiosk";
 const char* const defaultApplicationVersion = "1.0.0";
 const char* const defaultApplicationIcon = "qrc:///qml/assets/icons/AppLogoColor.png";
 const char* const defaultVideoUrl = "qrc:///qml/assets/videos/Qt.m4v";
+const unsigned int defaultVideoTimeout = 5000;
 
 #endif // CONSTANT_H

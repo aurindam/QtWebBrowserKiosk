@@ -3,7 +3,10 @@ import QtMultimedia 5.8
 
 Item {
     id: videoOverlay
+
     anchors.fill: parent
+    visible: true
+
     MediaPlayer {
         id: mediaPlayer
         source: AppEngine.getQString("video/url")
@@ -25,5 +28,7 @@ Item {
     onVisibleChanged: {
         if (visible)
             mediaPlayer.play()
+        else
+            timer.start()
     }
 }

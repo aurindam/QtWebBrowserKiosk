@@ -5,11 +5,13 @@ CONFIG -= app_bundle
 
 SOURCES = \
     appengine.cpp \
-    main.cpp
+    main.cpp \
+    eventfilter.cpp
 
 HEADERS = \
     appengine.h \
-    constant.h
+    constant.h \
+    eventfilter.h
 
 OTHER_FILES = \
     qml/BrowserWindow.qml \

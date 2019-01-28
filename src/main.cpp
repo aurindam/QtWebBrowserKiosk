@@ -29,7 +29,9 @@
 
 #include "appengine.h"
 #include "constant.h"
+#include "eventfilter.h"
 
+#include <QEvent>
 #include <QGuiApplication>
 #include <QCommandLineParser>
 #include <QQmlContext>
@@ -101,9 +103,20 @@ int main(int argc, char **argv)
     QQmlContext *rootContext = engine.rootContext();
     rootContext->setContextProperty("AppEngine", &appEngine);
     engine.load(QUrl("qrc:///qml/Main.qml"));
-    if (engine.rootObjects().isEmpty())
+
+    const QList<QObject* > rootObjects = engine.rootObjects();
+    const QObject *object = nullptr;
+    QObject *timer = nullptr;
+    if (rootObjects.isEmpty())
         return -1;
+    foreach(object, rootObjects) {
+        timer = object->findChild<QObject*>("timer");
+    }
+
+    EventFilter filter(timer);
+
     QObject::connect(&engine, SIGNAL(quit()), &app, SLOT(quit()));
 
+    app.installEventFilter(&filter);
     app.exec();
 }

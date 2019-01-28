@@ -72,14 +72,14 @@ ApplicationWindow {
     VideoOverlay {
         id: overlay
         anchors.fill: parent
-        visible: true
-        z: 1
     }
 
     Timer {
-        interval: 120000
-        running: true
+        id: timer
+        objectName: "timer"
+        interval: AppEngine.getUInt("video/timeout")
         repeat: true
         onTriggered: overlay.visible = true
+        function restartTimer() { timer.restart() }
     }
 }
