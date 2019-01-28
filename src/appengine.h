@@ -43,7 +43,7 @@ class AppEngine : public QObject {
     Q_PROPERTY(QString startUrl READ startUrl WRITE setStartUrl)
 
 public:
-    AppEngine(const QSettings &settings, QObject *parent = 0);
+    AppEngine(const QSettings &settings, bool reset = false, QObject *parent = 0);
 
     QString settingsPath();
     QString startUrl() const;

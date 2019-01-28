@@ -37,11 +37,12 @@
 #include <QDebug>
 
 AppEngine::AppEngine(const QSettings &settings,
+                     bool reset,
                      QObject *parent)
     : QObject(parent)
     , m_settings(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) % QDir::separator() % "settings.ini", QSettings::IniFormat, this)
 {
-    if (!m_settings.allKeys().count())
+    if (!m_settings.allKeys().count() || reset)
         setDefaultValues();
     set(settings);
 }

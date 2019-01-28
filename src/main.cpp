@@ -59,6 +59,12 @@ int main(int argc, char **argv)
              QCoreApplication::translate("main", "Configuration INI-file"),
              QCoreApplication::translate("main", "filepath"));
     parser.addOption(configOption);
+    QCommandLineOption resetOption(QStringList() << "r" << "reset",
+             QCoreApplication::translate("main", "Deletes saved config file and either "
+                                                 "(i) replaces with the data of config file "
+                                                 "passed with [config] option or (ii) creates "
+                                                 "a config file with default settings"));
+    parser.addOption(resetOption);
     // Process the actual command line arguments given by the user
     parser.process(app);
     const QStringList args = parser.positionalArguments();
@@ -75,7 +81,7 @@ int main(int argc, char **argv)
     app.setApplicationVersion(appVersion.isEmpty() ? QString(defaultApplicationVersion) : appVersion);
 
 
-    AppEngine appEngine(settings);
+    AppEngine appEngine(settings, parser.isSet(resetOption));
     if (args.count())
         appEngine.setStartUrl(args.at(0));
     // --- Network --- //
