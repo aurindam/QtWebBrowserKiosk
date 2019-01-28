@@ -87,10 +87,10 @@ void AppEngine::set(const QSettings &settings)
 QString AppEngine::fromUserInput(const QString& userInput) const
 {
     QFileInfo fileInfo(userInput);
-    QString url = QUrl::fromUserInput(userInput).toString();
+    QUrl url = QUrl::fromUserInput(userInput);
     if (fileInfo.exists())
-        url = QUrl::fromLocalFile(fileInfo.absoluteFilePath()).toString();
-    return url;
+        url = QUrl::fromLocalFile(fileInfo.absoluteFilePath());
+    return url.toString();
 }
 
 bool AppEngine::isUrl(const QString& userInput)
