@@ -181,6 +181,7 @@ QStringList AppEngine::getQStringList(const QString &name, const QStringList &de
 
 void AppEngine::setDefaultValues()
 {
+    m_settings.clear();
     m_settings.setValue(organization, defaultOrganization);
     m_settings.setValue(organizationDomain, defaultOrganizationDomain);
     m_settings.setValue(applicationName, defaultApplicationName);
