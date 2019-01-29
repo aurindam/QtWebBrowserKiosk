@@ -1,16 +1,20 @@
 # QtWebBrowserKiosk
 
-Usage: qtwebbrowserkiosk [options] [startUrl]
-
+Usage: ./qtwebbrowserkiosk [options] [startUrl]
 This is a modified Qt Web Browser working in kiosk mode
 
 Options:
   -h, --help               Displays this help.
   -v, --version            Displays version information.
   -c, --config <filepath>  Configuration INI-file
+  -r, --reset              Deletes saved config file and either (i) replaces
+                           with the data of config file passed with [config]
+                           option or (ii) creates a config file with default
+                           settings
 
 Arguments:
-  startUrl                  Open this URL, optionally (else the home page in config file will be used)
+  startUrl                 Open this URL, optionally (else the homepage in
+                           config file will be used)
  
 ****************************************************************************
 ****************************************************************************
@@ -22,11 +26,11 @@ Below is a sample config file
 icon=qrc:///qml/assets/icons/AppLogoColor.png
 name=QtWebBrowserKiosk
 organization=The Qt Company
-organization-domain=www.qt.io
+organization-domain=http://www.qt.io
 version=1.0.0
 
 [browser]
-homepage=www.qt.io
+homepage=http://www.qt.io
 ignore_ssl_errors=true
 javascript=true
 javascript_can_open_windows=false
@@ -44,6 +48,10 @@ password=password
 port=3128
 system=true
 username=username
+
+[video]
+playlist=qrc:///qml/assets/videos/Qt.m4v
+timeout=5000
 
 [view]
 fixed-height=600

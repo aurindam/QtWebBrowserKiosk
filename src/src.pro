@@ -15,7 +15,9 @@ HEADERS = \
 
 OTHER_FILES = \
     qml/BrowserWindow.qml \
-    qml/Keyboard.qml
+    qml/Keyboard.qml \
+    qml/VideoOverlay.qml \
+    qml/Main.qml
 
 QT += qml quick webengine quickcontrols2
 
